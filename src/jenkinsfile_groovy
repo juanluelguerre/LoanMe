@@ -1,0 +1,25 @@
+node {
+    stage('Checkout git repo') {
+      git branch: 'master', url: params.GIT_REPO
+    }
+    
+    stage('Build and Publish') {
+        sh(script: "dotnet publish MyBudget.sln -c Release", returnStdout: true)
+    }
+    
+    stage('Deploy to Azure (DEV)') {
+        azureWebAppPublish azureCredentialsId: params.AZURE_CREDENTIAL_ID, 
+        resourceGroup: params.RESOURCE_GROUP, 
+        appName: params.APP_NAME_DEV, 
+        sourceDirectory: "MyBudget/bin/Release/netcoreapp2.2/publish/"
+    }
+    
+    stage('Deploy to Azure (PROD)') {
+        input 'Do you approve deployment to PRO?'
+        
+        azureWebAppPublish azureCredentialsId: params.AZURE_CREDENTIAL_ID, 
+        resourceGroup: params.RESOURCE_GROUP, 
+        appName: params.APP_NAME, 
+        sourceDirectory: "MyBudget/bin/Release/netcoreapp2.2/publish/"
+    }
+}

@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout git repo (DEV)') {
+            steps {
+                git branch: 'master', url: params.GIT_REPO
+            }
+        }
+        
+        stage('Build and Publish') {
+            steps {
+                sh(script: "dotnet publish MyBudget.sln -c Release", returnStdout: true)
+            }
+        }
+        
+        stage('Deploy to Azure (DEV)') {
+            steps {
+                azureWebAppPublish azureCredentialsId: params.AZURE_CREDENTIAL_ID, 
+                resourceGroup: params.RESOURCE_GROUP, 
+                appName: params.APP_NAME_DEV, 
+                sourceDirectory: "MyBudget/bin/Release/netcoreapp2.2/publish/"
+            }
+        }
+        
+        stage('Deploy to Azure (PROD)') {
+            //when {
+            //    branch 'master'
+            //}    
+            steps {
+                input 'Do you approve deployment to PRO?'
+                
+                azureWebAppPublish azureCredentialsId: params.AZURE_CREDENTIAL_ID, 
+                resourceGroup: params.RESOURCE_GROUP, 
+                appName: params.APP_NAME_PROD, 
+                sourceDirectory: "MyBudget/bin/Release/netcoreapp2.2/publish/"
+            }
+        }        
+    }
+}
