@@ -3,7 +3,7 @@ using LoanMe.Finance.Api.Application.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace LoanMe.Customers.Api.Application.Data
+namespace LoanMe.Catalog.Api.Application.Data
 {
 	public class DataRepository<T> : IDataService<T> where T: AggregateRoot
 	{

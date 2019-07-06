@@ -8,7 +8,7 @@ namespace LoanMe.Finance.Api.Application.Domain.Aggregates
 	public class Account : AggregateRoot
 	{		
 		[Key]
-		public int Id { get; set; }
+		public int Id { get; private set; }
 		// public string Name { get; private set; }
 
 		[MaxLength(4)]
@@ -25,20 +25,9 @@ namespace LoanMe.Finance.Api.Application.Domain.Aggregates
 		[NotMapped]
 		public string IBAN => $"{Entity}-{Office}-{Control}-{Number}";
 
-		private List<Loan> loans;
-
-		public List<Loan> GetLoans()
+		public Account(int id, string entity, string office, string control, string number)
 		{
-			return loans;
-		}
-
-		private void SetLoans(List<Loan> value)
-		{
-			loans = value;
-		}
-
-		public Account(string entity, string office, string control, string number)
-		{			
+			Id = id;
 			Entity = entity;
 			Office = office;
 			Control = control;

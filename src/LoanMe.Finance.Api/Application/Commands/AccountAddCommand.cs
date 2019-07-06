@@ -8,7 +8,8 @@ namespace LoanMe.Finance.Api.Application.Commands
 	{
 		private const string SEPARATOR = "-"; 		
 
-		[Key]
+		
+		public int Id { get;  private set; }
 		public string IBAN { get; private set; }
 
 		public string Entity => IBAN?.Split(SEPARATOR).First();
@@ -16,8 +17,9 @@ namespace LoanMe.Finance.Api.Application.Commands
 		public string Control => IBAN?.Split(SEPARATOR)[2];
 		public string Number => IBAN?.Split(SEPARATOR).Last();		
 
-		public AccountAddCommand(string iban)
+		public AccountAddCommand(int id, string iban)
 		{
+			Id = id;
 			IBAN = iban;
 		}
 	}

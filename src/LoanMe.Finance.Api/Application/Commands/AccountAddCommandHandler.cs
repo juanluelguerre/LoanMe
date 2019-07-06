@@ -27,7 +27,7 @@ namespace LoanMe.Finance.Api.Application.Commands
 		{
 			_logger.LogInformation($"Handle({nameof(AccountAddCommandHandler)}) -> {command}");			
 
-			var account = new Account(command.Entity, command.Office, command.Control, command.Number);
+			var account = new Account(command.Id, command.Entity, command.Office, command.Control, command.Number);
 
 			var result = _dataService.Add(account);
 

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace LoanMe.Customers.Api.Application.Data
+namespace LoanMe.Catalog.Api.Application.Data
 {
 	public class DbInitializer
 	{

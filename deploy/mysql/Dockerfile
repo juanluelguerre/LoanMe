@@ -2,7 +2,7 @@
 FROM mysql
 
 # Add a database
-ENV MYSQL_DATABASE MyBudget
+ENV MYSQL_DATABASE CatalogDB
 
 # All scripts in docker-entrypoint-initdb.d/ are automatically
 # executed during container startup

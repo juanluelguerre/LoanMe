@@ -1,3 +1,3 @@
-CREATE DATABASE MyBudget;
+CREATE DATABASE CatalogDB;
 
 
