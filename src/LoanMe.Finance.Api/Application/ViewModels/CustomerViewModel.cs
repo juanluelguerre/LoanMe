@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LoanMe.Customers.Api.Application.Queries
+namespace LoanMe.Catalog.Api.Application.Queries
 {
 	public class CustomerViewModel
 	{

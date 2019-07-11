@@ -1,4 +1,4 @@
-﻿using LoanMe.Customers.Api.Application.Data;
+﻿using LoanMe.Catalog.Api.Application.Data;
 using LoanMe.Finance.Api.Application.Domain.Aggregates;
 using LoanMe.Finance.Api.Application.Domain.Interfaces;
 using Marten;

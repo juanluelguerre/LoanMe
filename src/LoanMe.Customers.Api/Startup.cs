@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using LoanMe.Catalog.Api.Application.Entities;
+using LoanMe.Catalog.Api.Application.Repository;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LoanMe.Customers.Api.Application.Domain.Aggregates;
-using LoanMe.Customers.Api.Application.Domain.Interfaces;
-using LoanMe.Customers.Api.Application.Data;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace LoanMe.Customers.Api
+namespace LoanMe.Catalog.Api
 {
 	public class Startup
 	{
@@ -27,18 +27,16 @@ namespace LoanMe.Customers.Api
 			//	.AddAzureADBearer(options => Configuration.Bind("AzureAd", options));
 
 			//services.AddDbContext<DataContext>(
-			//	  opt => opt.UseInMemoryDatabase("MyBudget")
+			//	  opt => opt.UseInMemoryDatabase("Customers")
 			//		.ConfigureWarnings(cw => cw.Ignore(InMemoryEventId.TransactionIgnoredWarning)));			
 
 			// EF Connnection
 			services.AddDbContext<DataContext>(
-				(ops) => ops.UseMySQL(Configuration.GetConnectionString("Customers")));
+				(ops) => ops.UseMySql(Configuration.GetConnectionString("Customers")));
 
 			services.AddScoped<DataContext>();
-			services.AddScoped<IDataService<Customer>, DataRepository<Customer>>();
-			services.AddScoped<IDataService<CustomerAccount>, DataRepository<CustomerAccount>>();
-			// services.AddScoped<IDataService<Budget>, DataRepository<Budget>>();			
-
+			services.AddScoped<ICustomerRepository, CustomerRepository>();
+			
 			// Add Swagger
 			services.AddSwaggerGen(options =>
 			{
@@ -53,7 +51,24 @@ namespace LoanMe.Customers.Api
 				);
 			});
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			services.AddCors(options =>
+			{
+				options.AddPolicy("CorsPolicy",
+					builder => builder.AllowAnyOrigin()
+					.WithMethods(
+						"GET",
+						"POST",
+						"PUT",
+						"DELETE",
+						"OPTIONS")
+					.AllowAnyHeader()
+					.AllowCredentials());
+			});
+
+			services.AddMvc()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+			services.AddAutoMapper(typeof(Startup));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,10 +84,12 @@ namespace LoanMe.Customers.Api
 				app.UseHsts();
 			}
 
+			app.UseCors("CorsPolicy");
+
 			app.UseSwagger()
 				.UseSwaggerUI(c =>
 				{
-					c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyBudget v1.0.0");
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "LoanMe v1.0.0");
 				});
 
 

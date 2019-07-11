@@ -1,4 +1,4 @@
-﻿using LoanMe.Customers.Api.Application.Queries;
+﻿using LoanMe.Catalog.Api.Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

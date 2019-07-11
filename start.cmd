@@ -1,4 +1,5 @@
 @echo off
-call .\deploy\mysql\start.cmd
 
-call .\deploy\postgres\start.cmd
+CALL .\deploy\mysql\start.cmd
+
+CALL .\deploy\postgres\start.cmd

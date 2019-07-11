@@ -1,12 +1,12 @@
 ﻿using Dapper;
-using LoanMe.Customers.Api.Application.Queries;
+using LoanMe.Catalog.Api.Application.Queries;
 using LoanMe.Finance.Api.Application.Domain.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace LoanMe.Customers.Api.Application.Data
+namespace LoanMe.Catalog.Api.Application.Data
 {
 	public class DataReadonlyRepository : IDataReadonlyRepository
 	{

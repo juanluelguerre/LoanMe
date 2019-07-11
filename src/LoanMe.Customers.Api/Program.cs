@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace LoanMe.Customers.Api
+namespace LoanMe.Catalog.Api
 {
 	public class Program
 	{
