@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LoanMe.Catalog.Api.Services.EventHandling
 {
-	public class CatalogPriceChangeEventHandler : IIntegrationEventHandler<CatalogPriceChangedEvent>
+	public class CatalogPriceChangeEventHandler : IIntegrationEventHandler<ProductPriceChangedEvent>
 	{
 		private readonly CatalogContext _catalogContext;
 		private readonly ILogger<CatalogPriceChangeEventHandler> _logger;
@@ -20,7 +20,7 @@ namespace LoanMe.Catalog.Api.Services.EventHandling
 			_logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
 		}
 
-		public async Task Handle(CatalogPriceChangedEvent @event)
+		public async Task Handle(ProductPriceChangedEvent @event)
 		{
 			using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
 			{

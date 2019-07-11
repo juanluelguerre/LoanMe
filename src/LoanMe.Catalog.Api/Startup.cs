@@ -42,7 +42,16 @@ namespace LoanMe.Catalog.Api
 		public void ConfigureServices(IServiceCollection services)
 		{
 			//services.AddAuthentication(AzureADDefaults.BearerAuthenticationScheme)
-			//	.AddAzureADBearer(options => Configuration.Bind("AzureAd", options));			
+			//	.AddAzureADBearer(options => Configuration.Bind("AzureAd", options));						
+
+			services.AddCap(x =>
+			{
+				x.UseEntityFramework<CatalogContext>();
+
+				//x.UseRabbitMQ("ConnectionString");
+				//x.UseKafka("ConnectionString");
+				x.UseAzureServiceBus(Configuration.GetConnectionString("AzureSB"));
+			});
 
 			services
 				//.AddAppInsight(Configuration)
@@ -85,7 +94,7 @@ namespace LoanMe.Catalog.Api
 		}
 	}
 
-	public static class CustomExtensionMethods
+	internal static class CustomExtensionMethods
 	{
 		//public static IServiceCollection AddAppInsight(this IServiceCollection services, IConfiguration configuration)
 		//{
@@ -140,7 +149,7 @@ namespace LoanMe.Catalog.Api
 		{
 			services.AddDbContext<CatalogContext>(options =>
 			{
-				options.UseSqlServer(configuration.GetConnectionString("Catalog"),
+				options.UseSqlServer(configuration.GetConnectionString("CatalogDB"),
 									 sqlServerOptionsAction: sqlOptions =>
 									 {
 										 sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -156,7 +165,7 @@ namespace LoanMe.Catalog.Api
 
 			services.AddDbContext<IntegrationEventLogContext>(options =>
 			{
-				options.UseSqlServer(configuration.GetConnectionString("Catalog"),
+				options.UseSqlServer(configuration.GetConnectionString("CatalogDB"),
 									 sqlServerOptionsAction: sqlOptions =>
 									 {
 										 sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);

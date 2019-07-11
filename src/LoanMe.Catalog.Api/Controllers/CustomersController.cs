@@ -13,6 +13,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using LoanMe.Catalog.Api.Services;
+using DotNetCore.CAP;
+using DotNetCore.CAP.SqlServer;
 
 namespace LoanMe.Catalog.Api.Controllers
 {
@@ -23,11 +25,12 @@ namespace LoanMe.Catalog.Api.Controllers
 		private readonly CatalogContext _catalogContext;
 		private readonly CatalogSettings _settings;		
 		private readonly ICatalogEventService _catalogEventService;
+		private readonly ICapPublisher _eventBus;
 
-		public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings) /*, ICatalogIntegrationEventService catalogIntegrationEventService*/
+		public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICapPublisher eventBus) 
 		{
 			_catalogContext = context ?? throw new ArgumentNullException(nameof(context));
-			// _catalogIntegrationEventService = catalogIntegrationEventService ?? throw new ArgumentNullException(nameof(catalogIntegrationEventService));
+			_eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
 			_settings = settings.Value;
 
 			context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;			
@@ -241,13 +244,20 @@ namespace LoanMe.Catalog.Api.Controllers
 			if (raiseProductPriceChangedEvent) // Save product's data and publish integration event through the Event Bus if price has changed
 			{
 				//Create Integration Event to be published through the Event Bus
-				var priceChangedEvent = new CatalogPriceChangedEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
-				
-				// Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
-				await _catalogEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);
+				var priceChangedEvent = new ProductPriceChangedEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
 
-				// Publish through the Event Bus and mark the saved event as published
-				await _catalogEventService.PublishThroughEventBusAsync(priceChangedEvent);
+				//// Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
+				//await _catalogEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);
+
+				////// Publish through the Event Bus and mark the saved event as published
+				////await _catalogEventService.PublishThroughEventBusAsync(priceChangedEvent);
+
+				// Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
+				using (_catalogContext.Database.GetDbConnection().BeginTransaction(_eventBus, autoCommit: true))
+				{
+					_eventBus.Publish(nameof(ProductPriceChangedEvent), priceChangedEvent);
+				};
+
 			}
 			else // Just save the updated product because the Product's Price hasn't changed.
 			{
