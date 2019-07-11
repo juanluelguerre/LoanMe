@@ -1,6 +1,8 @@
-﻿namespace LoanMe.Catalog.Api.Services.Events
+﻿using LoanMe.ApplicationBlocks.EventBus.Events;
+
+namespace LoanMe.Catalog.Api.Services.Events
 {
-	public class CatalogPriceChangedEvent
+	public class CatalogPriceChangedEvent : IntegrationEvent
 	{
 		public int ProductId { get; private set; }
 		public decimal NewPrice { get; private set; }

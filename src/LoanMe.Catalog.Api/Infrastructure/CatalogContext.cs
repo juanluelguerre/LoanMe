@@ -1,5 +1,6 @@
 ﻿using LoanMe.Catalog.Api.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace LoanMe.Catalog.Api.Application.Entities
 {
@@ -23,6 +24,17 @@ namespace LoanMe.Catalog.Api.Application.Entities
 			//builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
 
 			builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
+		}
+
+		public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<CatalogContext>
+		{
+			public CatalogContext CreateDbContext(string[] args)
+			{
+				var optionsBuilder = new DbContextOptionsBuilder<CatalogContext>()
+					.UseSqlServer("Server=tcp:loanme.database.windows.net,1433;Initial Catalog=catalogdb;Persist Security Info=False;User ID=jlguerrero;Password=Password12!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
+				return new CatalogContext(optionsBuilder.Options);
+			}
 		}
 	}
 }

@@ -28,18 +28,18 @@ namespace LoanMe.Catalog.Api
 				Log.Information("Configuring web host ({ApplicationContext})...", AppName);
 				var host = BuildWebHost(configuration, args);
 
-				Log.Information("Applying migrations ({ApplicationContext})...", AppName);
-				host.MigrateDbContext<CatalogContext>((context, services) =>
-				{
-					var env = services.GetService<IHostingEnvironment>();
-					var settings = services.GetService<IOptions<CatalogSettings>>();
-					var logger = services.GetService<ILogger<CatalogContextSeed>>();
+				//Log.Information("Applying migrations ({ApplicationContext})...", AppName);
+				//host.MigrateDbContext<CatalogContext>((context, services) =>
+				//{
+				//	var env = services.GetService<IHostingEnvironment>();
+				//	var settings = services.GetService<IOptions<CatalogSettings>>();
+				//	var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
-					new CatalogContextSeed()
-						.SeedAsync(context, env, settings, logger)
-						.Wait();
-				});
-				//.MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+				//	new CatalogContextSeed()
+				//		.SeedAsync(context, env, settings, logger)
+				//		.Wait();
+				//});
+				//// .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
 				Log.Information("Starting web host ({ApplicationContext})...", AppName);
 				host.Run();
@@ -60,9 +60,12 @@ namespace LoanMe.Catalog.Api
 		private static IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
 				.CaptureStartupErrors(false)
-				.UseStartup<Startup>()
-				// .UseApplicationInsights()
-				.UseContentRoot(Directory.GetCurrentDirectory())
+				.UseStartup<Startup>()				
+				.UseContentRoot(Directory.GetCurrentDirectory())				
+				.ConfigureAppConfiguration((host, config) => {
+					if (host.HostingEnvironment.IsDevelopment())
+						config.AddUserSecrets<Startup>();
+				})
 				.UseWebRoot("Pics")
 				.UseConfiguration(configuration)
 				.UseSerilog()
@@ -90,7 +93,7 @@ namespace LoanMe.Catalog.Api
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 				.AddEnvironmentVariables();
 
-			var config = builder.Build();
+			var config = builder.Build();			
 
 			if (config.GetValue<bool>("UseVault", false))
 			{

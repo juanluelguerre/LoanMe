@@ -13,7 +13,7 @@ namespace LoanMe.Catalog.Api.Infrastructure.EntityConfiguration
 
 			builder.Property(ci => ci.Id)
 				// It doesn't work in MySQL
-				// .ForSqlServerUseSequenceHiLo("catalog_hilo")
+				.ForSqlServerUseSequenceHiLo("catalog_hilo")
 				.IsRequired();
 
 			builder.Property(ci => ci.Name)

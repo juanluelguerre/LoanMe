@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LoanMe.Catalog.Api.Migrations
 {
@@ -7,12 +6,23 @@ namespace LoanMe.Catalog.Api.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence(
+                name: "catalog_brand_hilo",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "catalog_hilo",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "catalog_type_hilo",
+                incrementBy: 10);
+
             migrationBuilder.CreateTable(
                 name: "CatalogBrand",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Brand = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -24,8 +34,7 @@ namespace LoanMe.Catalog.Api.Migrations
                 name: "CatalogType",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Type = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -37,8 +46,7 @@ namespace LoanMe.Catalog.Api.Migrations
                 name: "Catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
@@ -88,6 +96,15 @@ namespace LoanMe.Catalog.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "CatalogType");
+
+            migrationBuilder.DropSequence(
+                name: "catalog_brand_hilo");
+
+            migrationBuilder.DropSequence(
+                name: "catalog_hilo");
+
+            migrationBuilder.DropSequence(
+                name: "catalog_type_hilo");
         }
     }
 }
