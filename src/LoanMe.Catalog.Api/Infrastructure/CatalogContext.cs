@@ -31,7 +31,7 @@ namespace LoanMe.Catalog.Api.Application.Entities
 			public CatalogContext CreateDbContext(string[] args)
 			{
 				var optionsBuilder = new DbContextOptionsBuilder<CatalogContext>()
-					.UseSqlServer("Server=tcp:loanme.database.windows.net,1433;Initial Catalog=catalogdb;Persist Security Info=False;User ID=jlguerrero;Password=Password12!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+					.UseSqlServer("xxxxx");
 
 				return new CatalogContext(optionsBuilder.Options);
 			}
