@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Marten" Version="3.6.0" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
@@ -29,6 +30,10 @@
     <Folder Include="Infrastructure\" />
     <Folder Include="Application\Models\" />
     <Folder Include="Application\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LoanMe.ApplicationBlocks\LoanMe.ApplicationBlocks.csproj" />
   </ItemGroup>
 
 </Project>

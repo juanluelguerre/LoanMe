@@ -1,30 +1,18 @@
 ﻿using AutoMapper;
-using Catalog.API.IntegrationEvents;
-using LoanMe.ApplicationBlocks.EventBus;
-using LoanMe.ApplicationBlocks.EventBus.Abstractions;
-using LoanMe.ApplicationBlocks.EventBusRabbitMQ;
 using LoanMe.Catalog.Api.Application.Entities;
 using LoanMe.Catalog.Api.Infrastructure.Filters;
-using LoanMe.Catalog.Api.Services;
 using LoanMe.Catalog.Api.Services.EventHandling;
-using LoanMe.EventBus.EventBusServiceBus;
 using LoanMe.EventBus.IntegrationEventLogEF;
-using LoanMe.EventBus.IntegrationEventLogEF.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using RabbitMQ.Client;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
-using System.Data.Common;
 using System.Reflection;
 
 namespace LoanMe.Catalog.Api
@@ -43,15 +31,6 @@ namespace LoanMe.Catalog.Api
 		{
 			//services.AddAuthentication(AzureADDefaults.BearerAuthenticationScheme)
 			//	.AddAzureADBearer(options => Configuration.Bind("AzureAd", options));						
-
-			services.AddCap(x =>
-			{
-				x.UseEntityFramework<CatalogContext>();
-
-				//x.UseRabbitMQ("ConnectionString");
-				//x.UseKafka("ConnectionString");
-				x.UseAzureServiceBus(Configuration.GetConnectionString("AzureSB"));
-			});
 
 			services
 				//.AddAppInsight(Configuration)
@@ -203,99 +182,47 @@ namespace LoanMe.Catalog.Api
 
 		public static IServiceCollection AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
-				sp => (DbConnection c) => new IntegrationEventLogService(c));
-
-			services.AddTransient<ICatalogEventService, CatalogEventService>();
-
-			if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
-			{
-				services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-				{
-					var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
-					var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-					var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.EventBusConnection);
-
-					return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
-				});
-			}
-			else
-			{
-				services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
-				{
-					var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
-					var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-
-					var factory = new ConnectionFactory()
-					{
-						HostName = configuration["EventBusConnection"],
-						DispatchConsumersAsync = true
-					};
-
-					if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
-					{
-						factory.UserName = configuration["EventBusUserName"];
-					}
-
-					if (!string.IsNullOrEmpty(configuration["EventBusPassword"]))
-					{
-						factory.Password = configuration["EventBusPassword"];
-					}
-
-					var retryCount = 5;
-					if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
-					{
-						retryCount = int.Parse(configuration["EventBusRetryCount"]);
-					}
-
-					return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
-				});
-			}
-
+			services.AddTransient<OrderStatusChangeToAwaitingValidationEventHandler>();
+			services.AddTransient<CatalogPriceChangeEventHandler>(); 
 			return services;
 		}
 
 		public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
 		{
-			var subscriptionClientName = configuration["SubscriptionClientName"];
-
-			if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+			services.AddCap(options =>
 			{
-				services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
+				options.UseSqlServer(configuration.GetConnectionString("CatalogDB"));
+
+				if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
 				{
-					var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();					
-					var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
-					var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-					return new EventBusServiceBus(serviceBusPersisterConnection, logger,
-						eventBusSubcriptionsManager, sp, subscriptionClientName);
-				});
-
-			}
-			else
-			{
-				services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+					options.UseAzureServiceBus(configuration.GetConnectionString("EventBus"));
+				}
+				else
 				{
-					var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();					
-					var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-					var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-					var retryCount = 5;
-					if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+					options.UseRabbitMQ(conf =>
 					{
-						retryCount = int.Parse(configuration["EventBusRetryCount"]);
-					}
+						conf.HostName = configuration.GetConnectionString("EventBus");
+						if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
+						{
+							conf.UserName = configuration["EventBusUserName"];
+						}
+						if (!string.IsNullOrEmpty(configuration["EventBusPassword"]))
+						{
+							conf.Password = configuration["EventBusPassword"];
+						}
+					});
+				}
 
-					return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, 
-						eventBusSubcriptionsManager, sp, subscriptionClientName, retryCount);
-				});
-			}
+				if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+				{
+					options.FailedRetryCount = int.Parse(configuration["EventBusRetryCount"]);
+				}
 
-			services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-			services.AddTransient<CatalogPriceChangeEventHandler>();
-
-			// TODO: Add handlser as needed !
+				if (!string.IsNullOrEmpty(configuration["SubscriptionClientName"]))
+				{
+					options.DefaultGroup = configuration["SubscriptionClientName"];
+				}
+			});
 
 			return services;
 		}

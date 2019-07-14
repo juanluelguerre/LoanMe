@@ -1,4 +1,4 @@
-﻿using LoanMe.ApplicationBlocks.EventBus.Abstractions;
+﻿using DotNetCore.CAP;
 using LoanMe.Catalog.Api.Application.Entities;
 using LoanMe.Catalog.Api.Services.Events;
 using Microsoft.Extensions.Logging;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LoanMe.Catalog.Api.Services.EventHandling
 {
-	public class CatalogPriceChangeEventHandler : IIntegrationEventHandler<ProductPriceChangedEvent>
+	public class CatalogPriceChangeEventHandler : ICapSubscribe
 	{
 		private readonly CatalogContext _catalogContext;
 		private readonly ILogger<CatalogPriceChangeEventHandler> _logger;
@@ -20,6 +20,7 @@ namespace LoanMe.Catalog.Api.Services.EventHandling
 			_logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
 		}
 
+		[CapSubscribe(nameof(ProductPriceChangedEvent))]
 		public async Task Handle(ProductPriceChangedEvent @event)
 		{
 			using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
