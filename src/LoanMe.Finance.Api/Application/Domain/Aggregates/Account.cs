@@ -44,7 +44,6 @@ namespace LoanMe.Finance.Api.Application.Domain.Aggregates
 			Balance += amount;
 		}
 
-
 		public void RemoveAmount(double amount)
 		{
 			Balance -= amount;

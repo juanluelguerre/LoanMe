@@ -16,7 +16,7 @@ namespace LoanMe.Catalog.Api.Application.Data
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Account>().ToTable(TABLE_ACCOUNTS);
-			modelBuilder.Entity<Product>().ToTable(TABLE_PRODUCTS);
+			// modelBuilder.Entity<Product>().ToTable(TABLE_PRODUCTS);
 			modelBuilder.Entity<Loan>().ToTable(TABLE_LOANS);
 
 			// Bug: MySQL buhttps://stackoverflow.com/questions/47330796/entity-framework-core-with-mysql-unknown-column-in-field-list
@@ -24,24 +24,21 @@ namespace LoanMe.Catalog.Api.Application.Data
 			//		modelBuilder.Entity<Customer>().Property(a => a.BankAccounts).HasColumnName("BankAccount");
 
 			// modelBuilder.Entity<Product>().HasKey(c => new { c.Id });
-			modelBuilder.Entity<Product>().HasKey(c => new { c.Id });
-			modelBuilder.Entity<Loan>().HasOne(c => c.Product);
+			// modelBuilder.Entity<Product>().HasKey(c => new { c.Id });
+			// modelBuilder.Entity<Loan>().HasOne(c => c.Product);
 
-			var p1 = new Product(1, "Car", "The more beautiful car in the world", 100000.00);
-			var p2 = new Product(2, "House", "My Future big house", 250000.00);
-			var p3 = new Product(3, "Computer", "Nice latest invisible laptop", 21000.00);
+			//var p1 = new Product(1, "Car", "The more beautiful car in the world", 100000.00);
+			//var p2 = new Product(2, "House", "My Future big house", 250000.00);
+			//var p3 = new Product(3, "Computer", "Nice latest invisible laptop", 21000.00);
 
 			// Master data
-			modelBuilder.Entity<Product>().HasData(p1, p2, p3);
+			// modelBuilder.Entity<Product>().HasData(p1, p2, p3);
 
 			// Master data
 			modelBuilder.Entity<Loan>().HasData(
-				new Loan { Id = 1, Product = p1, IBAN = "ES12-1234-12-12345678" }, 
-				new Loan { Id = 2, Product = p2, IBAN = "ES12-1234-12-12345678" },
-				new Loan { Id = 3, Product = p3, IBAN = "ES12-4321-21-87654321" }
-			//new Loan(1, p1, "ES12-1234-12-12345678"),
-			//new Loan(2, p2, "ES12-1234-12-12345678"),
-			//new Loan(3, p3, "ES12-4321-21-87654321")
+			new Loan(1, 1, "ES12-1234-12-12345678"),
+			new Loan(2, 2, "ES12-1234-12-12345678"),
+			new Loan(3, 3, "ES12-4321-21-87654321")
 			);
 
 			// Sample data
