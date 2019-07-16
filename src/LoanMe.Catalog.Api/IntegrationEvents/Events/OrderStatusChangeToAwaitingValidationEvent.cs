@@ -1,12 +1,12 @@
 ﻿namespace LoanMe.Catalog.Api.IntegrationEvents.Events
 {
-	public class OrderStatusChangeToAwaitingValidationIntegrationEvent
+	public class OrderStatusChangeToAwaitingValidationEvent
 	{
 		public int OrderId { get; }
 		public int ProductId { get; }
 		public bool Available { get; }
 
-		public OrderStatusChangeToAwaitingValidationIntegrationEvent(int orderId, int productId, bool available)
+		public OrderStatusChangeToAwaitingValidationEvent(int orderId, int productId, bool available)
 		{
 			OrderId = orderId;
 			ProductId = productId;

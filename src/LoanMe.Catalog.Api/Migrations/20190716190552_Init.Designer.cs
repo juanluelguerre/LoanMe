@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanMe.Catalog.Api.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20190711175254_Init")]
+    [Migration("20190716190552_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

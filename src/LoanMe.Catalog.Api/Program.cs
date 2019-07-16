@@ -28,18 +28,18 @@ namespace LoanMe.Catalog.Api
 				Log.Information("Configuring web host ({ApplicationContext})...", AppName);
 				var host = BuildWebHost(configuration, args);
 
-				//Log.Information("Applying migrations ({ApplicationContext})...", AppName);
-				//host.MigrateDbContext<CatalogContext>((context, services) =>
-				//{
-				//	var env = services.GetService<IHostingEnvironment>();
-				//	var settings = services.GetService<IOptions<CatalogSettings>>();
-				//	var logger = services.GetService<ILogger<CatalogContextSeed>>();
+				Log.Information("Applying migrations ({ApplicationContext})...", AppName);
+				host.MigrateDbContext<CatalogContext>((context, services) =>
+				{
+					var env = services.GetService<IHostingEnvironment>();
+					var settings = services.GetService<IOptions<CatalogSettings>>();
+					var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
-				//	new CatalogContextSeed()
-				//		.SeedAsync(context, env, settings, logger)
-				//		.Wait();
-				//});
-				//// .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+					new CatalogContextSeed()
+						.SeedAsync(context, env, settings, logger)
+						.Wait();
+				});
+				// .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
 				Log.Information("Starting web host ({ApplicationContext})...", AppName);
 				host.Run();

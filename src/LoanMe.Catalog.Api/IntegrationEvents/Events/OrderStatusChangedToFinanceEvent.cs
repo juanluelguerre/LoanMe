@@ -1,6 +1,6 @@
 ﻿namespace LoanMe.Catalog.Api.IntegrationEvents.Events
 {
-	public class OrderStatusChangedToFinanceIntegrationEvent
+	public class OrderStatusChangedToFinanceEvent
 	{
 		public int OrderId { get; set; }
 		public int ProductId { get; set; }

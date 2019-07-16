@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace LoanMe.Catalog.Api.IntegrationEvents.EventHandling
 {
-	public class OrderStatusChangedToFinanceIntegrationEventHandler : ICapSubscribe
+	public class OrderStatusChangedToFinanceEventHandler : ICapSubscribe
 	{
 		private readonly CatalogContext _catalogContext;
-		private readonly ILogger<OrderStatusChangedToFinanceIntegrationEventHandler> _logger;
+		private readonly ILogger<OrderStatusChangedToFinanceEventHandler> _logger;
 
-		public OrderStatusChangedToFinanceIntegrationEventHandler(
+		public OrderStatusChangedToFinanceEventHandler(
 			CatalogContext catalogContext,
-			ILogger<OrderStatusChangedToFinanceIntegrationEventHandler> logger)
+			ILogger<OrderStatusChangedToFinanceEventHandler> logger)
 		{
 			_catalogContext = catalogContext;
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		[CapSubscribe(nameof(OrderStatusChangedToFinanceIntegrationEvent))]
-		public async Task Handle(OrderStatusChangedToFinanceIntegrationEvent @event)
+		[CapSubscribe(nameof(OrderStatusChangedToFinanceEvent))]
+		public async Task Handle(OrderStatusChangedToFinanceEvent @event)
 		{
 			using (LogContext.PushProperty("IntegrationEventContext", $"{Program.AppName}"))
 			{

@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace LoanMe.Catalog.Api.IntegrationEvents.EventHandling
 {
-	public class OrderStatusChangeToAwaitingValidationIntegrationEventHandler : ICapSubscribe
+	public class OrderStatusChangeToAwaitingValidationEventHandler : ICapSubscribe
 	{
 		private readonly CatalogContext _catalogContext;
 		private readonly ICapPublisher _eventBus;
-		private readonly ILogger<OrderStatusChangeToAwaitingValidationIntegrationEventHandler> _logger;
+		private readonly ILogger<OrderStatusChangeToAwaitingValidationEventHandler> _logger;
 
-		public OrderStatusChangeToAwaitingValidationIntegrationEventHandler(
+		public OrderStatusChangeToAwaitingValidationEventHandler(
 			CatalogContext catalogContext,
 			ICapPublisher eventBus,
-			ILogger<OrderStatusChangeToAwaitingValidationIntegrationEventHandler> logger)
+			ILogger<OrderStatusChangeToAwaitingValidationEventHandler> logger)
 		{
 			_catalogContext = catalogContext;
 			_eventBus = eventBus;
 			_logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
 		}
 
-		[CapSubscribe(nameof(OrderStatusChangeToAwaitingValidationIntegrationEvent))]
-		public async Task Handle(OrderStatusChangeToAwaitingValidationIntegrationEvent @event)
+		[CapSubscribe(nameof(OrderStatusChangeToAwaitingValidationEvent))]
+		public async Task Handle(OrderStatusChangeToAwaitingValidationEvent @event)
 		{
 			using (LogContext.PushProperty("IntegrationEventContext", $"{Program.AppName}"))
 			{
@@ -33,11 +33,11 @@ namespace LoanMe.Catalog.Api.IntegrationEvents.EventHandling
 
 				if (productAvailable)
 				{					
-					await _eventBus.PublishAsync(nameof(OrderStockConfirmedIntegrationEvent), new OrderStockConfirmedIntegrationEvent(@event.OrderId));
+					await _eventBus.PublishAsync(nameof(OrderStockConfirmedEvent), new OrderStockConfirmedEvent(@event.OrderId));
 				}
 				else
 				{
-					await _eventBus.PublishAsync(nameof(OrderStockRejectedIntegrationEvent), new OrderStockRejectedIntegrationEvent(@event.OrderId));
+					await _eventBus.PublishAsync(nameof(OrderStockRejectedEvent), new OrderStockRejectedEvent(@event.OrderId));
 
 				}
 			}

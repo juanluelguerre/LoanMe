@@ -182,9 +182,9 @@ namespace LoanMe.Catalog.Api
 
 		public static IServiceCollection AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.AddTransient<OrderStatusChangeToAwaitingValidationIntegrationEventHandler>();
-			services.AddTransient<OrderStatusChangedToFinanceIntegrationEventHandler>();
-			services.AddTransient<ProductPriceChangeIntegrationEventHandler>(); 
+			services.AddTransient<OrderStatusChangeToAwaitingValidationEventHandler>();
+			services.AddTransient<OrderStatusChangedToFinanceEventHandler>();
+			services.AddTransient<ProductPriceChangeEventHandler>(); 
 
 			return services;
 		}

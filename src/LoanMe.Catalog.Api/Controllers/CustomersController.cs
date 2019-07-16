@@ -240,7 +240,7 @@ namespace LoanMe.Catalog.Api.Controllers
 			if (raiseProductPriceChangedEvent) // Save product's data and publish integration event through the Event Bus if price has changed
 			{
 				//Create Integration Event to be published through the Event Bus
-				var priceChangedEvent = new ProductPriceChangedIntegrationEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
+				var priceChangedEvent = new ProductPriceChangedEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
 
 				//// Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
 				//await _catalogEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);
@@ -251,7 +251,7 @@ namespace LoanMe.Catalog.Api.Controllers
 				// Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
 				using (_catalogContext.Database.GetDbConnection().BeginTransaction(_eventBus, autoCommit: true))
 				{
-					_eventBus.Publish(nameof(ProductPriceChangedIntegrationEvent), priceChangedEvent);
+					_eventBus.Publish(nameof(ProductPriceChangedEvent), priceChangedEvent);
 				};
 
 			}
