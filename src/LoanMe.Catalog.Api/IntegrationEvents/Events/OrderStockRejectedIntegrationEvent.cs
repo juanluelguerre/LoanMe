@@ -1,0 +1,8 @@
+﻿namespace LoanMe.Catalog.Api.IntegrationEvents.Events
+{
+	public class OrderStockRejectedIntegrationEvent
+	{
+		public int OrderId { get; }
+		public OrderStockRejectedIntegrationEvent(int orderId) => OrderId = orderId;
+	}
+}

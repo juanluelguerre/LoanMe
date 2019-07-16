@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LoanMe.Catalog.Api.Application.Entities;
 using LoanMe.Catalog.Api.Infrastructure.Filters;
-using LoanMe.Catalog.Api.Services.EventHandling;
+using LoanMe.Catalog.Api.IntegrationEvents.EventHandling;
 using LoanMe.EventBus.IntegrationEventLogEF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

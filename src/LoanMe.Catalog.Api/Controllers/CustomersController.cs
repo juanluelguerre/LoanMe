@@ -1,9 +1,9 @@
-﻿using LoanMe.Catalog.Api;
-using LoanMe.Catalog.Api.Extensions;
-using LoanMe.Catalog.Api.Model;
-using LoanMe.Catalog.Api.Services.Events;
-using LoanMe.Catalog.Api.ViewModel;
+﻿using DotNetCore.CAP;
 using LoanMe.Catalog.Api.Application.Entities;
+using LoanMe.Catalog.Api.Extensions;
+using LoanMe.Catalog.Api.IntegrationEvents.Events;
+using LoanMe.Catalog.Api.Model;
+using LoanMe.Catalog.Api.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -12,9 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using LoanMe.Catalog.Api.Services;
-using DotNetCore.CAP;
-using DotNetCore.CAP.SqlServer;
 
 namespace LoanMe.Catalog.Api.Controllers
 {
@@ -23,8 +20,7 @@ namespace LoanMe.Catalog.Api.Controllers
 	public class CatalogController : ControllerBase
 	{
 		private readonly CatalogContext _catalogContext;
-		private readonly CatalogSettings _settings;		
-		private readonly ICatalogEventService _catalogEventService;
+		private readonly CatalogSettings _settings;				
 		private readonly ICapPublisher _eventBus;
 
 		public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICapPublisher eventBus) 
