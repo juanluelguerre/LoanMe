@@ -75,6 +75,8 @@ namespace LoanMe.Catalog.Api
 
 	internal static class CustomExtensionMethods
 	{
+		private const string DATABASE_CONNECIONSTRING = "DataBaseConnection";
+
 		//public static IServiceCollection AddAppInsight(this IServiceCollection services, IConfiguration configuration)
 		//{
 		//}
@@ -128,7 +130,7 @@ namespace LoanMe.Catalog.Api
 		{
 			services.AddDbContext<CatalogContext>(options =>
 			{
-				options.UseSqlServer(configuration.GetConnectionString("CatalogDB"),
+				options.UseSqlServer(configuration.GetConnectionString(DATABASE_CONNECIONSTRING),
 									 sqlServerOptionsAction: sqlOptions =>
 									 {
 										 sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -144,7 +146,7 @@ namespace LoanMe.Catalog.Api
 
 			services.AddDbContext<IntegrationEventLogContext>(options =>
 			{
-				options.UseSqlServer(configuration.GetConnectionString("CatalogDB"),
+				options.UseSqlServer(configuration.GetConnectionString(DATABASE_CONNECIONSTRING),
 									 sqlServerOptionsAction: sqlOptions =>
 									 {
 										 sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -193,17 +195,17 @@ namespace LoanMe.Catalog.Api
 		{
 			services.AddCap(options =>
 			{
-				options.UseSqlServer(configuration.GetConnectionString("CatalogDB"));
+				options.UseSqlServer(configuration.GetConnectionString(DATABASE_CONNECIONSTRING));
 
-				if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+				if (configuration.GetValue<bool>(nameof(CatalogSettings.AzureStorageEnabled)))
 				{
-					options.UseAzureServiceBus(configuration.GetConnectionString("EventBus"));
+					options.UseAzureServiceBus(configuration.GetConnectionString(nameof(CatalogSettings.EventBusConnection)));
 				}
 				else
 				{
 					options.UseRabbitMQ(conf =>
 					{
-						conf.HostName = configuration.GetConnectionString("EventBus");
+						conf.HostName = configuration.GetConnectionString(nameof(CatalogSettings.EventBusConnection));
 						if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
 						{
 							conf.UserName = configuration["EventBusUserName"];
