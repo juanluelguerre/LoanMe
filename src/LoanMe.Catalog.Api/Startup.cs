@@ -197,7 +197,7 @@ namespace LoanMe.Catalog.Api
 			{
 				options.UseSqlServer(configuration.GetConnectionString(DATABASE_CONNECIONSTRING));
 
-				if (configuration.GetValue<bool>(nameof(CatalogSettings.AzureStorageEnabled)))
+				if (configuration.GetValue<bool>(nameof(CatalogSettings.AzureServiceBusEnabled)))
 				{
 					options.UseAzureServiceBus(configuration.GetConnectionString(nameof(CatalogSettings.EventBusConnection)));
 				}

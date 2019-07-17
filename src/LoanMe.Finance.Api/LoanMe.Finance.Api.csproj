@@ -27,9 +27,15 @@
 
   <ItemGroup>
     <Folder Include="Application\Data\Mocks\" />
-    <Folder Include="Infrastructure\" />
     <Folder Include="Application\Models\" />
+    <Folder Include="Application\IntegrationEvents\" />
     <Folder Include="Application\Queries\" />
+    <Folder Include="Infrastructure\Filters\" />
+    <Folder Include="Infrastructure\Middlewares\" />
+    <Folder Include="Infrastructure\ActionResults\" />
+    <Folder Include="Infrastructure\Exceptions\" />
+    <Folder Include="Infrastructure\Auth\" />
+    <Folder Include="Infrastructure\Services\" />
   </ItemGroup>
 
   <ItemGroup>

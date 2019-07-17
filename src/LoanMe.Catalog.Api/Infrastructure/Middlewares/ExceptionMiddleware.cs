@@ -8,7 +8,7 @@
 //using System.Security.Authentication;
 //using System.Threading.Tasks;
 
-//namespace LoanMe.Customers.Api.Infrastructure.Middleware
+//namespace LoanMe.Customers.Api.Infrastructure.Middlewares
 //{
 //	public class ExceptionMiddleware
 //	{
