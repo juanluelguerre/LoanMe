@@ -1,6 +1,5 @@
-﻿using LoanMe.Finance.Api.Application.Domain.Aggregates;
-using LoanMe.Finance.Api.Application.Domain.Interfaces;
-using LoanMe.Finance.Api.Application.Events;
+﻿using LoanMe.Catalog.Api.Domain.Aggregates.AccountAggregate;
+using LoanMe.Finance.Api.Doamin.Events;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -12,21 +11,23 @@ namespace LoanMe.Finance.Api.Application.Commands
 	{
 		private readonly ILogger _logger;		
 		private readonly IMediator _mediator;
-		private readonly IDataService<Account> _dataService;
+		private readonly IAccountsRepository _customerRepository;
 
-		public DepositAddCommandHandler(IMediator mediator, IDataService<Account> dataService, Logger<DepositAddCommandHandler> logger)
-		{
-			_logger = logger;			
+		public DepositAddCommandHandler(IMediator mediator, IAccountsRepository customerRepository, Logger<DepositAddCommandHandler> logger)
+		{					
 			_mediator = mediator;
+			_customerRepository = customerRepository;
+			_logger = logger;
 		}
 
 		public async Task<bool> Handle(DepositAddCommand command, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Handle({nameof(AccountAddCommandHandler)}) -> {command}");
+			_logger.LogInformation($"Handle({nameof(DepositAddCommandHandler)}) -> {command}");
 
-			var newAccount = command.Account;
-			newAccount.AddAmount(command.Amount);
-			var updated = _dataService.Update(newAccount);
+			//var newAccount = command.Account.AccountNumber;
+			//newAccount.AddAmount(command.Amount);
+
+			var updated = _customerRepository.UpdateAmount(command.Account, command.Amount);
 			if (updated)
 			{
 				await _mediator.Publish(Apply(command));
@@ -42,7 +43,7 @@ namespace LoanMe.Finance.Api.Application.Commands
 				throw new System.ArgumentNullException(nameof(command));
 			}
 
-			return new DepositAddedEvent(command.Account.IBAN);
+			return new DepositAddedEvent(command.Account.AccountNumber, command.Amount);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using LoanMe.Finance.Api.Application.Domain.Aggregates;
+﻿using LoanMe.Finance.Api.Domain.Aggregates;
 using MediatR;
 
 namespace LoanMe.Finance.Api.Application.Commands
@@ -6,6 +6,6 @@ namespace LoanMe.Finance.Api.Application.Commands
 	public class DepositAddCommand : IRequest<bool>
 	{
 		public Account Account { get; set; }
-		public double Amount { get; set; }
+		public decimal Amount { get; set; }
 	}
 }

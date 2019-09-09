@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using HealthChecks.UI.Client;
 using LoanMe.Catalog.Api.Application.Entities;
 using LoanMe.Catalog.Api.Infrastructure.Filters;
-using LoanMe.Catalog.Api.IntegrationEvents.EventHandling;
+using LoanMe.Catalog.Api.Application.IntegrationEvents.EventHandlers;
 using LoanMe.EventBus.IntegrationEventLogEF;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Reflection;
@@ -30,19 +33,18 @@ namespace LoanMe.Catalog.Api
 		public void ConfigureServices(IServiceCollection services)
 		{
 			//services.AddAuthentication(AzureADDefaults.BearerAuthenticationScheme)
-			//	.AddAzureADBearer(options => Configuration.Bind("AzureAd", options));						
+			//	.AddAzureADBearer(options => Configuration.Bind("AzureAd", options));
 
 			services
 				//.AddAppInsight(Configuration)
 				.AddCustomMVC()
 				.AddCustomDbContext(Configuration)
 				.AddCustomOptions(Configuration)
-				.AddIntegrationServices(Configuration)
-				.AddEventBus(Configuration)
-				.AddSwagger();
-				// .AddCustomHealthCheck(Configuration);
-
-			services.AddAutoMapper(typeof(Startup));
+				.AddCustomIntegrationServices(Configuration)
+				.AddCustomEventBus(Configuration)
+				.AddCustomSwagger()
+				.AddCustomHealthCheck(Configuration)
+				.AddAutoMapper(typeof(Startup));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +59,18 @@ namespace LoanMe.Catalog.Api
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
+
+			app.UseHealthChecks("/hc", new HealthCheckOptions()
+			{
+				Predicate = _ => true,
+				ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+			});
+
+			app.UseHealthChecks("/liveness", new HealthCheckOptions
+			{
+				Predicate = r => r.Name.Contains("self")
+			});
+
 
 			app.UseCors("CorsPolicy");
 
@@ -93,8 +107,7 @@ namespace LoanMe.Catalog.Api
 			services.AddCors(options =>
 			{
 				options.AddPolicy("CorsPolicy",
-					builder => builder
-					// builder => builder.AllowAnyOrigin()
+					builder => builder					
 					.SetIsOriginAllowed((host) => true)
 					.WithMethods(
 						"GET",
@@ -109,7 +122,7 @@ namespace LoanMe.Catalog.Api
 			return services;
 		}
 
-		public static IServiceCollection AddSwagger(this IServiceCollection services)
+		public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
 		{
 			services.AddSwaggerGen(options =>
 			{
@@ -182,7 +195,7 @@ namespace LoanMe.Catalog.Api
 			return services;
 		}
 
-		public static IServiceCollection AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddCustomIntegrationServices(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.AddTransient<OrderStatusChangeToAwaitingValidationEventHandler>();
 			services.AddTransient<OrderStatusChangedToFinanceEventHandler>();
@@ -191,7 +204,7 @@ namespace LoanMe.Catalog.Api
 			return services;
 		}
 
-		public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddCustomEventBus(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.AddCap(options =>
 			{
@@ -227,6 +240,15 @@ namespace LoanMe.Catalog.Api
 					options.DefaultGroup = configuration["SubscriptionClientName"];
 				}
 			});
+
+			return services;
+		}
+
+		public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
+		{
+			var hcBuilder = services.AddHealthChecks();
+
+			hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
 
 			return services;
 		}

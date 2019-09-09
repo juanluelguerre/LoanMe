@@ -1,7 +1,7 @@
 ﻿using LoanMe.Catalog.Api.Application.Data;
-using LoanMe.Finance.Api.Application.Domain.Aggregates;
-using LoanMe.Finance.Api.Application.Domain.Interfaces;
-using Marten;
+using LoanMe.Catalog.Api.Application.Queries;
+using LoanMe.Catalog.Api.Domain.Aggregates.AccountAggregate;
+using LoanMe.Finance.Api.Application.Domain.Aggregates.AccountAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,19 +33,17 @@ namespace LoanMe.Finance.Api
 			//		.ConfigureWarnings(cw => cw.Ignore(InMemoryEventId.TransactionIgnoredWarning)));			
 
 			// EF Connnection
-			services.AddDbContext<DataContext>(
-				(ops) => ops.UseMySQL(Configuration.GetConnectionString("Finance")));
+			services.AddDbContext<FinanceContext>(
+				(ops) => ops.UseSqlServer(Configuration.GetConnectionString("Finance")));
 
 			// Dapper Connection
-			services.AddScoped<IDataReadonlyRepository>(
-				(_) => new DataReadonlyRepository(Configuration.GetConnectionString("Finance")));
+			services.AddScoped<IAccountsReadOnlyRepository>(
+				(_) => new AccountsReadOnlyRepository(Configuration.GetConnectionString("Finance")));
 
-			services.AddScoped((x) => GetDocumentStore());
+			// services.AddScoped((x) => GetDocumentStore());
 
-			services.AddScoped<DataContext>();
-			services.AddScoped<IDataService<Account>, DataRepository<Account>>();
-			// services.AddScoped<IDataService<Product>, DataRepository<Product>>();
-			// services.AddScoped<IDataService<Budget>, DataRepository<Budget>>();
+			services.AddScoped<FinanceContext>();
+			services.AddScoped<IAccountsRepository, AccountsRepository>();			
 
 			services.AddMediatR(typeof(Startup));
 
@@ -91,21 +89,31 @@ namespace LoanMe.Finance.Api
 			app.UseMvc();
 		}
 
-		private IDocumentStore GetDocumentStore()
+		//private IDocumentStore GetDocumentStore()
+		//{
+		//	const string SCHEMA_NAME = "EventStore";
+
+		//	var store = DocumentStore.For(options =>
+		//	{
+		//		options.Connection(Configuration.GetConnectionString("EventStore"));
+		//		options.AutoCreateSchemaObjects = AutoCreate.All;
+		//		options.DatabaseSchemaName = SCHEMA_NAME;
+		//		options.Events.DatabaseSchemaName = SCHEMA_NAME;
+
+		//		// options.Events.InlineProjections.AggregateStreamsWith<XXXX>();
+		//	});
+
+		//	return store;
+		//}
+
+		protected virtual void ConfigureAuth(IApplicationBuilder app)
 		{
-			const string SCHEMA_NAME = "EventStore";
+			//if (Configuration.GetValue<bool>("UseLoadTest"))
+			//{
+			//	app.UseMiddleware<ByPassAuthMiddleware>();
+			//}
 
-			var store = DocumentStore.For(options =>
-			{
-				options.Connection(Configuration.GetConnectionString("EventStore"));
-				options.AutoCreateSchemaObjects = AutoCreate.All;
-				options.DatabaseSchemaName = SCHEMA_NAME;
-				options.Events.DatabaseSchemaName = SCHEMA_NAME;
-
-				// options.Events.InlineProjections.AggregateStreamsWith<XXXX>();
-			});
-
-			return store;
+			//app.UseAuthentication();
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using LoanMe.Catalog.Api.Model;
+﻿using LoanMe.Catalog.Api.Application.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -34,11 +34,13 @@ namespace LoanMe.Catalog.Api.Application.Entities
 			{
 				IConfigurationRoot configuration = new ConfigurationBuilder()
 				   .SetBasePath(Directory.GetCurrentDirectory())
+				   .AddUserSecrets<Startup>()
 				   .AddJsonFile("appsettings.json")
 				   .Build();
 
 				var builder = new DbContextOptionsBuilder<CatalogContext>();
-				builder.UseSqlServer(configuration.GetConnectionString("CatalogDB"));
+
+				builder.UseSqlServer(configuration.GetConnectionString("DataBaseConnection"));
 
 				return new CatalogContext(builder.Options);
 			}

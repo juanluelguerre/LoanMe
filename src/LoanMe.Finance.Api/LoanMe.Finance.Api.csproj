@@ -10,15 +10,17 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="DotNetCore.CAP.AzureServiceBus" Version="2.6.0" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="2.6.0" />
+    <PackageReference Include="DotNetCore.CAP.SqlServer" Version="2.6.0" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
-    <PackageReference Include="Marten" Version="3.6.0" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.9" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.16" />
     <PackageReference Include="Serilog" Version="2.8.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
@@ -26,15 +28,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Data\Mocks\" />
+    <Folder Include="Application\Infrastructure\IntegrationEvents\EventHandlers\" />
+    <Folder Include="Application\Infrastructure\IntegrationEvents\Events\" />
+    <Folder Include="Application\Infrastructure\Mocks\" />
+    <Folder Include="Application\Sagas\" />
+    <Folder Include="Application\Infrastructure\EntityConfigurations\" />
     <Folder Include="Application\Models\" />
-    <Folder Include="Application\IntegrationEvents\" />
-    <Folder Include="Application\Queries\" />
     <Folder Include="Infrastructure\Filters\" />
     <Folder Include="Infrastructure\Middlewares\" />
     <Folder Include="Infrastructure\ActionResults\" />
-    <Folder Include="Infrastructure\Exceptions\" />
     <Folder Include="Infrastructure\Auth\" />
+    <Folder Include="Infrastructure\Migrations\" />
     <Folder Include="Infrastructure\Services\" />
   </ItemGroup>
 

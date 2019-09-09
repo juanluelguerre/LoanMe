@@ -1,6 +1,6 @@
 ﻿using LoanMe.Catalog.Api.Application.Entities;
-using LoanMe.Catalog.Api.Extensions;
-using LoanMe.Catalog.Api.Model;
+using LoanMe.Catalog.Api.Application.Models;
+using LoanMe.Catalog.Api.Application.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

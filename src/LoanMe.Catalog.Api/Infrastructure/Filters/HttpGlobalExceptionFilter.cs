@@ -1,5 +1,5 @@
 ﻿using LoanMe.Catalog.Api.Infrastructure.ActionResults;
-using LoanMe.Catalog.Api.Infrastructure.Exceptions;
+using LoanMe.Catalog.Api.Application.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -66,7 +66,7 @@ namespace LoanMe.Catalog.Api
 					if (host.HostingEnvironment.IsDevelopment())
 						config.AddUserSecrets<Startup>();
 				})
-				.UseWebRoot("Pics")
+				.UseWebRoot("Assets")
 				.UseConfiguration(configuration)
 				.UseSerilog()
 				.Build();

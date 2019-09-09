@@ -1,0 +1,8 @@
+﻿namespace LoanMe.Catalog.Api.Application.Models
+{
+	public class CatalogType
+	{
+		public int Id { get; set; }
+		public string Type { get; set; }
+	}
+}
