@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanMe.Catalog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20190903122815_Init")]
-    partial class Init
+    [Migration("20190910064446_InitLocal")]
+    partial class InitLocal
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace LoanMe.Catalog.Api.Infrastructure.Migrations
                 .HasAnnotation("Relational:Sequence:.catalog_type_hilo", "'catalog_type_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("LoanMe.Catalog.Api.Model.CatalogBrand", b =>
+            modelBuilder.Entity("LoanMe.Catalog.Api.Application.Models.CatalogBrand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace LoanMe.Catalog.Api.Infrastructure.Migrations
                     b.ToTable("CatalogBrand");
                 });
 
-            modelBuilder.Entity("LoanMe.Catalog.Api.Model.CatalogItem", b =>
+            modelBuilder.Entity("LoanMe.Catalog.Api.Application.Models.CatalogItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,7 +77,7 @@ namespace LoanMe.Catalog.Api.Infrastructure.Migrations
                     b.ToTable("Catalog");
                 });
 
-            modelBuilder.Entity("LoanMe.Catalog.Api.Model.CatalogType", b =>
+            modelBuilder.Entity("LoanMe.Catalog.Api.Application.Models.CatalogType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,14 +93,14 @@ namespace LoanMe.Catalog.Api.Infrastructure.Migrations
                     b.ToTable("CatalogType");
                 });
 
-            modelBuilder.Entity("LoanMe.Catalog.Api.Model.CatalogItem", b =>
+            modelBuilder.Entity("LoanMe.Catalog.Api.Application.Models.CatalogItem", b =>
                 {
-                    b.HasOne("LoanMe.Catalog.Api.Model.CatalogBrand", "CatalogBrand")
+                    b.HasOne("LoanMe.Catalog.Api.Application.Models.CatalogBrand", "CatalogBrand")
                         .WithMany()
                         .HasForeignKey("CatalogBrandId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("LoanMe.Catalog.Api.Model.CatalogType", "CatalogType")
+                    b.HasOne("LoanMe.Catalog.Api.Application.Models.CatalogType", "CatalogType")
                         .WithMany()
                         .HasForeignKey("CatalogTypeId")
                         .OnDelete(DeleteBehavior.Cascade);

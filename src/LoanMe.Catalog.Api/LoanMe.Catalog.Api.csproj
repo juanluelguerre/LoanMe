@@ -37,7 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Sagas\" />
     <Folder Include="Assets\" />
+    <Folder Include="Infrastructure\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

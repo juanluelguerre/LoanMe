@@ -15,7 +15,8 @@ dotnet ef migrations add Init -o Infrastructure\Migrations
 
 if %ERRORLEVEL% == 0 (
     echo RUNINNG Database Update...
-    dotnet ef database update
+    cd src
+    
 ) else (
     echo Error found: No 'database update' started !
 )

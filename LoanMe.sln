@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIs", "APIs", "{78D1D80D-C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoanMe.Web", "src\LoanMe.Web\LoanMe.Web.csproj", "{9B01FEC0-8AB5-43A2-BE4E-AEAFE01A659E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoanMe.Customers.Api", "src\LoanMe.Customers.Api\LoanMe.Customers.Api.csproj", "{62091557-DBA9-436F-94BB-6F58209AEAFD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoanMe.Finance.Api", "src\LoanMe.Finance.Api\LoanMe.Finance.Api.csproj", "{7ED1EB84-A5AF-4E92-936A-A8FCAF882C10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoanMe.Catalog.Api", "src\LoanMe.Catalog.Api\LoanMe.Catalog.Api.csproj", "{617BDE5D-CE9C-42B1-8172-D7938BF4F9B2}"
@@ -21,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoanMe.ApplicationBlocks", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoanMe.ApplicationBlocks.Tests", "test\LoanMe.ApplicationBlocks.Tests\LoanMe.ApplicationBlocks.Tests.csproj", "{83542924-7E75-4AB8-B4B3-FFE20C0C59E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanMe.Finance.IntegrationTests", "test\LoanMe.Finance.IntegrationTests\LoanMe.Finance.IntegrationTests.csproj", "{9F7812B4-E0DE-4CC3-826B-B6A6A2D70B4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoanMe.Finance.IntegrationTests", "test\LoanMe.Finance.IntegrationTests\LoanMe.Finance.IntegrationTests.csproj", "{9F7812B4-E0DE-4CC3-826B-B6A6A2D70B4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,11 +34,6 @@ Global
 		{9B01FEC0-8AB5-43A2-BE4E-AEAFE01A659E}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{9B01FEC0-8AB5-43A2-BE4E-AEAFE01A659E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B01FEC0-8AB5-43A2-BE4E-AEAFE01A659E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{62091557-DBA9-436F-94BB-6F58209AEAFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62091557-DBA9-436F-94BB-6F58209AEAFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62091557-DBA9-436F-94BB-6F58209AEAFD}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
-		{62091557-DBA9-436F-94BB-6F58209AEAFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62091557-DBA9-436F-94BB-6F58209AEAFD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7ED1EB84-A5AF-4E92-936A-A8FCAF882C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7ED1EB84-A5AF-4E92-936A-A8FCAF882C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ED1EB84-A5AF-4E92-936A-A8FCAF882C10}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
@@ -83,7 +76,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9B01FEC0-8AB5-43A2-BE4E-AEAFE01A659E} = {FB36560C-BA8A-455E-A3C7-06F0F619A352}
-		{62091557-DBA9-436F-94BB-6F58209AEAFD} = {78D1D80D-C11C-4B67-9C58-01C1D81CA666}
 		{7ED1EB84-A5AF-4E92-936A-A8FCAF882C10} = {78D1D80D-C11C-4B67-9C58-01C1D81CA666}
 		{617BDE5D-CE9C-42B1-8172-D7938BF4F9B2} = {78D1D80D-C11C-4B67-9C58-01C1D81CA666}
 		{111731BD-C38D-4267-B896-B9ECBA127E02} = {FB36560C-BA8A-455E-A3C7-06F0F619A352}

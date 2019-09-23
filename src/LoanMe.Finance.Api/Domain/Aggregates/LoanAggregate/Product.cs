@@ -10,13 +10,16 @@ namespace LoanMe.Finance.Api.Domain.Aggregates
 		public double Price { get; private set; }
 		public CurrencyType Currency { get; private set; }
 
-		public Product(int id, string name, string description, double prize)
+		protected Product()
 		{
-			Id = id;
+			Currency = CurrencyType.EUR;
+		}
+
+		public Product(string name, string description, double price) : this()
+		{			
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 			Description = description ?? throw new ArgumentNullException(nameof(description));
-			Price = prize;
-			Currency = CurrencyType.EUR;
+			Price = price;			
 		}
 	}
 }

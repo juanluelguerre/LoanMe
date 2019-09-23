@@ -1,7 +1,8 @@
 ﻿using LoanMe.Catalog.Api.Domain.Aggregates.AccountAggregate;
 using LoanMe.Finance.Api.Domain.Aggregates;
+using LoanMe.Finance.Api.Domain.Aggregates.CustomerAggregate;
 using Microsoft.EntityFrameworkCore;
-
+using System.Threading.Tasks;
 
 namespace LoanMe.Catalog.Api.Application.Data
 {
@@ -13,6 +14,23 @@ namespace LoanMe.Catalog.Api.Application.Data
 		{
 			_context = context;
 		}
+
+		public async Task<Account> GetAsync(int accountNumber)
+		{
+			var account = await _context.Accounts.FindAsync(accountNumber);
+			if (account != null)
+			{
+				await _context.Entry(account)
+					.Reference(a => a.CreditCard).LoadAsync();
+				await _context.Entry(account)
+					.Reference(a => a.Customer).LoadAsync();
+				await _context.Entry(account)
+					.Reference(a => a.AccountNumber).LoadAsync();
+			}
+			
+			return account;
+		}
+
 
 		public bool Delete(string accountNumber)
 		{
@@ -30,10 +48,9 @@ namespace LoanMe.Catalog.Api.Application.Data
 
 		public bool UpdateAmount(Account account, decimal amount)
 		{
-			int result = _context.Database.ExecuteSqlCommand("Update Account set Amount = @amount WHERE AccountId = @accountId", amount, account.AccountNumber);			
+			int result = _context.Database.ExecuteSqlCommand("Update Account set Amount = @amount WHERE AccountId = @accountId", amount, account.AccountNumber);
 			return result > 0;
 		}
 
-		
 	}
 }

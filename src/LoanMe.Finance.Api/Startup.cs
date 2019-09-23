@@ -34,11 +34,11 @@ namespace LoanMe.Finance.Api
 
 			// EF Connnection
 			services.AddDbContext<FinanceContext>(
-				(ops) => ops.UseSqlServer(Configuration.GetConnectionString("Finance")));
+				(ops) => ops.UseSqlServer(Configuration.GetConnectionString("DataBaseConnection")));
 
 			// Dapper Connection
 			services.AddScoped<IAccountsReadOnlyRepository>(
-				(_) => new AccountsReadOnlyRepository(Configuration.GetConnectionString("Finance")));
+				(_) => new AccountsReadOnlyRepository(Configuration.GetConnectionString("DataBaseConnection")));
 
 			// services.AddScoped((x) => GetDocumentStore());
 

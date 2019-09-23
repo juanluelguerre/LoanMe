@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chronicle_" Version="2.0.1" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="DotNetCore.CAP.AzureServiceBus" Version="2.6.0" />
     <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="2.6.0" />
@@ -32,7 +33,6 @@
     <Folder Include="Application\Infrastructure\IntegrationEvents\Events\" />
     <Folder Include="Application\Infrastructure\Mocks\" />
     <Folder Include="Application\Sagas\" />
-    <Folder Include="Application\Infrastructure\EntityConfigurations\" />
     <Folder Include="Application\Models\" />
     <Folder Include="Infrastructure\Filters\" />
     <Folder Include="Infrastructure\Middlewares\" />

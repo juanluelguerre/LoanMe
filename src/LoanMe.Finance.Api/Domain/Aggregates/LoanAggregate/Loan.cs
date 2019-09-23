@@ -9,12 +9,15 @@ namespace LoanMe.Finance.Api.Domain.Aggregates
 		public AccountNumber AccountNumber { get;  set; }		
 		public decimal Amount { get; set; }
 
-		public Loan(int id, int productId, AccountNumber accountNumber)
+		protected Loan()
 		{
-			Id = id > 0 ? id: throw new ArgumentException($"LoanId must be greater than 0 !");
-			ProductId = productId > 0 ? productId : throw new ArgumentException($"ProductId must be greater than 0 !"); 
-			AccountNumber = accountNumber ?? throw new ArgumentNullException(nameof(accountNumber));
 			Amount = 0M;
+		}
+
+		public Loan(int productId, AccountNumber accountNumber) : this()
+		{			
+			ProductId = productId > 0 ? productId : throw new ArgumentException($"ProductId must be greater than 0 !"); 
+			AccountNumber = accountNumber ?? throw new ArgumentNullException(nameof(accountNumber));			
 		}
 	}
 }

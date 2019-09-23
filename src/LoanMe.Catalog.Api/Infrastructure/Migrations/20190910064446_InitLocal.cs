@@ -2,7 +2,7 @@
 
 namespace LoanMe.Catalog.Api.Infrastructure.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitLocal : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
